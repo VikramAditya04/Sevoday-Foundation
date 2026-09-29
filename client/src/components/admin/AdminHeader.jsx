@@ -11,7 +11,16 @@ export default function AdminHeader({
 }) {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const userName = user?.fullName || user?.name || "Super Admin";
+
+  const userName = user?.fullName || user?.name || "Admin";
+
+  // Fetch role from the authenticated user object
+  const userRole = user?.role || "Admin";
+
+  // Format role for display
+  const displayRole = userRole
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 
   return (
     <header className="sticky top-0 z-20 border-b border-[#dfe8df] bg-[#fdfcf7]/90 backdrop-blur-sm">
@@ -56,7 +65,7 @@ export default function AdminHeader({
               />
             ) : (
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1f4a2c] text-sm font-semibold text-white">
-                {userName.slice(0, 2).toUpperCase() || "SA"}
+                {userName.slice(0, 2).toUpperCase() || "AD"}
               </div>
             )}
 
@@ -64,7 +73,10 @@ export default function AdminHeader({
               <div className="text-sm font-semibold text-slate-900">
                 {userName}
               </div>
-              <div className="text-[11px] text-slate-500">Super Admin</div>
+
+              <div className="text-[11px] capitalize text-slate-500">
+                {displayRole}
+              </div>
             </div>
 
             <ChevronDown className="h-4 w-4 text-slate-500" />
@@ -82,6 +94,7 @@ export default function AdminHeader({
               >
                 <span>Edit Profile</span>
               </button>
+
               <button
                 type="button"
                 onClick={() => {
