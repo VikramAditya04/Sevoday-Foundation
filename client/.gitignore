@@ -7,9 +7,13 @@ dist-ssr/
 
 # Environment variables / secrets
 .env
+.env*
+.env.local
 .env.*
 !.env.example
 *.local
+.env.local.*
+
 
 # Logs
 logs/
