@@ -19,6 +19,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "../pages/admin/Dashboard";
 import MemberRequests from "../pages/admin/members/MemberRequests";
 import MemberDetails from "../pages/admin/members/MemberDetails";
+import AllMembers from "../pages/admin/members/AllMembers";
 import DonationList from "../pages/admin/donations/DonationList";
 import SliderContent from "../pages/admin/content/Slider";
 import AboutContent from "../pages/admin/content/About";
@@ -30,12 +31,12 @@ import NewsContent from "../pages/admin/news/NewsList";
 import NoticeContent from "../pages/admin/notices/NoticeList";
 import ProjectContent from "../pages/admin/projects/ProjectList";
 import ManagedContentPage from "../pages/public/ManagedContentPage";
+import Members from "../pages/public/Members";
 
 const placeholderPages = [
   ["certificates", "Certificates"],
   ["achievements", "Achievements"],
   ["beneficiaries", "Beneficiaries"],
-  ["members", "Members"],
   ["careers", "Careers"],
 ];
 
@@ -63,8 +64,20 @@ export default function AppRoutes() {
             <Route path="/admin/news" element={<NewsContent />} />
             <Route path="/admin/notices" element={<NoticeContent />} />
             <Route path="/admin/projects" element={<ProjectContent />} />
-            <Route path="/admin/members" element={<MemberRequests />} />
-            <Route path="/admin/members/:id" element={<MemberDetails />} />
+            <Route
+                path="/admin/members/all"
+                element={<AllMembers />}
+              />
+
+              <Route
+                path="/admin/members/requests"
+                element={<MemberRequests />}
+              />
+
+              <Route
+                path="/admin/members/:id"
+                element={<MemberDetails />}
+              />
           </Route>
         </Route>
         <Route element={<PublicLayout />}>
@@ -75,6 +88,7 @@ export default function AppRoutes() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/news" element={<News />} />
           <Route path="/news/:slug" element={<NewsDetail />} />
+          <Route path="/members" element={<Members />} />
           <Route path="/notices" element={<ManagedContentPage type="NOTICE" title="Notices" eyebrow="Stay informed" description="Important announcements and updates from Sevoday Foundation." />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/donate" element={<Donate />} />

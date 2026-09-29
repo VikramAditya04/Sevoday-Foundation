@@ -3,6 +3,24 @@ import User from "../models/User.js";
 import { sendMemberApprovalCredentialsEmail } from "../services/emailService.js";
 import generatePassword from "../utils/generatePassword.js";
 
+export async function allMembers(req, res, next) {
+  try {
+    const members = await User.find({
+      role: "MEMBER",
+      status: "APPROVED",
+    })
+      .select("-passwordHash")
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      members,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function pendingMembers(req, res, next) {
   try {
     return res.json({
@@ -119,6 +137,26 @@ export async function rejectMember(req, res, next) {
     member.rejectedBy = req.user._id;
     await member.save();
     return res.json({ success: true, message: "Membership application rejected.", member: { id: member._id, status: member.status } });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function publicMembers(req, res, next) {
+  try {
+    const members = await User.find({
+      role: "MEMBER",
+      status: "APPROVED",
+    })
+      .select(
+        "fullName profilePhoto requestedDesignation occupation city state district"
+      )
+      .sort({ approvedAt: -1, createdAt: -1 });
+
+    return res.json({
+      success: true,
+      members,
+    });
   } catch (error) {
     next(error);
   }

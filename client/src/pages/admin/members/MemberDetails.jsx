@@ -42,7 +42,10 @@ export default function MemberDetails() {
       setToast({ type: "success", message: result.message });
       setConfirm(null);
       if (action === "reject")
-        window.setTimeout(() => navigate("/admin/members"), 500);
+        window.setTimeout(
+          () => navigate("/admin/members/requests"),
+          500
+        );
       else await load();
     } catch (error) {
       setToast({ type: "error", message: error.message });
@@ -69,7 +72,10 @@ export default function MemberDetails() {
         type={toast?.type}
         onClose={() => setToast(null)}
       />
-      <Link className="admin-back-link" to="/admin/members">
+      <Link
+        className="admin-back-link"
+        to="/admin/members/requests"
+      >
         <ArrowLeft size={16} /> Back to requests
       </Link>
       <div className="admin-page-heading detail-heading">

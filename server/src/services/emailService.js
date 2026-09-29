@@ -124,7 +124,7 @@ const emailStyles = {
 };
 
 export async function sendRegistrationReceivedEmail({ email, fullName }) {
-  const loginUrl = `${process.env.CLIENT_URL || "http://localhost:5173"}/login`;
+  const loginUrl = `${process.env.CLIENT_URL || "https://sevodayfoundation.vercel.app"}/login`;
 
   return getTransporter().sendMail({
     from: from(),
@@ -219,7 +219,7 @@ export async function sendMemberApprovalCredentialsEmail({
   fullName,
   password,
 }) {
-  const loginUrl = `${process.env.CLIENT_URL || "http://localhost:5173"}/login`;
+  const loginUrl = `${process.env.CLIENT_URL || "https://sevodayfoundation.vercel.app"}/login`;
 
   return getTransporter().sendMail({
     from: from(),
@@ -442,14 +442,14 @@ Sevoday Foundation Team`,
       `,
     });
 
-    console.log("✅ Donation email sent successfully:", {
+    console.log("Donation email sent successfully:", {
       messageId: result.messageId,
       email,
     });
 
     return result;
   } catch (error) {
-    console.error("❌ Donation email failed:", {
+    console.error("Donation email failed:", {
       email,
       error: error.message,
       code: error.code,
