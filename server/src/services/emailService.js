@@ -343,11 +343,19 @@ export async function sendDonationAcknowledgementEmail({
   amount,
   paymentId,
 }) {
-  return getTransporter().sendMail({
-    from: from(),
-    to: email,
-    subject: "Sevoday Foundation - Donation Received",
-    text: `Dear ${fullName},
+  console.log("📧 Donation email function called:", {
+    email,
+    amount,
+    paymentId,
+  });
+
+  try {
+    const result = await getTransporter().sendMail({
+      from: from(),
+      to: email,
+      subject: "Sevoday Foundation - Donation Received",
+
+      text: `Dear ${fullName},
 
 Thank you for your generous donation of ₹${amount.toLocaleString("en-IN")} to Sevoday Foundation.
 
@@ -358,46 +366,96 @@ Your support helps us continue our work in education, healthcare and sustainable
 
 With gratitude,
 Sevoday Foundation Team`,
-    html: `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Donation Received</title>
-        </head>
-        <body style="${emailStyles.body}">
-          <div style="${emailStyles.wrapper}">
-            <div style="${emailStyles.container}">
-              <div style="${emailStyles.header}">
-                <h1 style="${emailStyles.brand}">
-                  Sevoday <span style="${emailStyles.brandAccent}">Foundation</span>
-                </h1>
-              </div>
-              <div style="${emailStyles.content}">
-                <h2 style="${emailStyles.title}">Thank you for your donation</h2>
-                <p style="${emailStyles.text}">Dear ${fullName},</p>
-                <p style="${emailStyles.text}">
-                  We have received your generous donation. Your support helps Sevoday Foundation continue its work in education, healthcare and sustainable community development.
-                </p>
-                <div style="${emailStyles.infoBox}">
-                  <p style="${emailStyles.credentialLabel}">Donation amount</p>
-                  <p style="${emailStyles.credentialValue}">₹${amount.toLocaleString("en-IN")}</p>
-                  <div style="height: 14px;"></div>
-                  <p style="${emailStyles.credentialLabel}">Payment reference</p>
-                  <p style="${emailStyles.credentialValue}">${paymentId}</p>
+
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Donation Received</title>
+          </head>
+
+          <body style="${emailStyles.body}">
+            <div style="${emailStyles.wrapper}">
+              <div style="${emailStyles.container}">
+
+                <div style="${emailStyles.header}">
+                  <h1 style="${emailStyles.brand}">
+                    Sevoday <span style="${emailStyles.brandAccent}">Foundation</span>
+                  </h1>
                 </div>
-                <p style="${emailStyles.text}; margin-bottom: 0;">
-                  With gratitude,<br /><strong style="color: #1F4A2C;">Sevoday Foundation Team</strong>
-                </p>
-              </div>
-              <div style="${emailStyles.footer}">
-                <p style="${emailStyles.footerText}">This is an automated acknowledgement from Sevoday Foundation.</p>
+
+                <div style="${emailStyles.content}">
+                  <h2 style="${emailStyles.title}">
+                    Thank you for your donation
+                  </h2>
+
+                  <p style="${emailStyles.text}">
+                    Dear ${fullName},
+                  </p>
+
+                  <p style="${emailStyles.text}">
+                    We have received your generous donation. Your support helps
+                    Sevoday Foundation continue its work in education, healthcare
+                    and sustainable community development.
+                  </p>
+
+                  <div style="${emailStyles.infoBox}">
+                    <p style="${emailStyles.credentialLabel}">
+                      Donation amount
+                    </p>
+
+                    <p style="${emailStyles.credentialValue}">
+                      ₹${amount.toLocaleString("en-IN")}
+                    </p>
+
+                    <div style="height: 14px;"></div>
+
+                    <p style="${emailStyles.credentialLabel}">
+                      Payment reference
+                    </p>
+
+                    <p style="${emailStyles.credentialValue}">
+                      ${paymentId}
+                    </p>
+                  </div>
+
+                  <p style="${emailStyles.text}; margin-bottom: 0;">
+                    With gratitude,<br />
+                    <strong style="color: #1F4A2C;">
+                      Sevoday Foundation Team
+                    </strong>
+                  </p>
+                </div>
+
+                <div style="${emailStyles.footer}">
+                  <p style="${emailStyles.footerText}">
+                    This is an automated acknowledgement from Sevoday Foundation.
+                  </p>
+                </div>
+
               </div>
             </div>
-          </div>
-        </body>
-      </html>
-    `,
-  });
+          </body>
+        </html>
+      `,
+    });
+
+    console.log("✅ Donation email sent successfully:", {
+      messageId: result.messageId,
+      email,
+    });
+
+    return result;
+  } catch (error) {
+    console.error("❌ Donation email failed:", {
+      email,
+      error: error.message,
+      code: error.code,
+      response: error.response,
+    });
+
+    throw error;
+  }
 }
